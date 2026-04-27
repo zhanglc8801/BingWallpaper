@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="WallpaperDownloader/WallpaperDownloader.csproj" />
+  <Project Path="WallpaperDownloaderForm/WallpaperDownloaderForm.csproj" />
+</Solution>
