@@ -114,7 +114,7 @@ namespace WallpaperDownloaderForm
             sfd.FileName = comboBox1.Text + "(" + this.BackgroundImage.Tag + ")_1080P.jpg";
             if (sfd.ShowDialog() == DialogResult.OK)
             {
-                bool b = await ApiClient.DownloadFileAsync(baseUrl + comboBox1.SelectedValue.ToString().Split('|')[0], sfd.FileName);
+                bool b = await ApiClient.DownloadFileAsync(baseUrl + comboBox1.SelectedValue.ToString().Split('|')[0], sfd.FileName, comboBox1.Text);
                 if (b)
                     label2.Text = "下载完成！";
                 else
@@ -132,7 +132,7 @@ namespace WallpaperDownloaderForm
             if (sfd.ShowDialog() == DialogResult.OK)
             {
                 string imgUrl = comboBox1.SelectedValue.ToString().Split('|')[0].Replace("_1920x1080.jpg&rf=LaDigue_1920x1080.jpg&pid=hp", "_UHD.jpg&rf=LaDigue_UHD.jpg&pid=hp&w=3840&h=2160&rs=1&c=4");
-                bool b = await ApiClient.DownloadFileAsync(baseUrl + imgUrl, sfd.FileName);
+                bool b = await ApiClient.DownloadFileAsync(baseUrl + imgUrl, sfd.FileName, comboBox1.Text);
                 if (b)
                     label2.Text = "下载完成！";
                 else
@@ -150,7 +150,7 @@ namespace WallpaperDownloaderForm
             if (sfd.ShowDialog() == DialogResult.OK)
             {
                 string imgUrl = comboBox1.SelectedValue.ToString().Split('|')[0].Replace("_1920x1080.jpg&rf=LaDigue_1920x1080.jpg&pid=hp", "_UHD.jpg");
-                bool b = await ApiClient.DownloadFileAsync(baseUrl + imgUrl, sfd.FileName);
+                bool b = await ApiClient.DownloadFileAsync(baseUrl + imgUrl, sfd.FileName, comboBox1.Text);
                 if (b)
                     label2.Text = "下载完成！";
                 else
@@ -163,11 +163,20 @@ namespace WallpaperDownloaderForm
             bool IsDrive = Directory.Exists(@"D:\");
             if (IsDrive)
             {
-                bool b = await ApiClient.DownloadFileAsync(baseUrl + comboBox1.SelectedValue.ToString().Split('|')[0], "d:\\" + this.BackgroundImage.Tag + ".jpg");
-                if (b)
-                    label2.Text = "下载完成，已成功保存到D:\\。";
-                else
-                    label2.Text = "下载失败。";
+                string imgUrl = comboBox1.SelectedValue.ToString().Split('|')[0];
+                string fileName = comboBox1.Text + "(" + this.BackgroundImage.Tag + ")_1080P.jpg";
+                await ApiClient.DownloadFileAsync(baseUrl + imgUrl, "d:\\" + fileName, comboBox1.Text);
+
+                string imgUrl_4K = comboBox1.SelectedValue.ToString().Split('|')[0].Replace("_1920x1080.jpg&rf=LaDigue_1920x1080.jpg&pid=hp", "_UHD.jpg&rf=LaDigue_UHD.jpg&pid=hp&w=3840&h=2160&rs=1&c=4");
+                string fileName2 = comboBox1.Text + "(" + this.BackgroundImage.Tag + ")_4K.jpg";
+                await ApiClient.DownloadFileAsync(baseUrl + imgUrl_4K, "d:\\" + fileName2, comboBox1.Text);
+
+                string imgUrl_Original = comboBox1.SelectedValue.ToString().Split('|')[0].Replace("_1920x1080.jpg&rf=LaDigue_1920x1080.jpg&pid=hp", "_UHD.jpg");
+                string fileName3 = comboBox1.Text + "(" + this.BackgroundImage.Tag + ")_Original.jpg";
+                await ApiClient.DownloadFileAsync(baseUrl + imgUrl_Original, "d:\\" + fileName3, comboBox1.Text);
+
+                MessageBox.Show("保存成功", "提示", MessageBoxButtons.OK, MessageBoxIcon.None);
+
             }
             else
                 MessageBox.Show("无法保存，因为D盘不存在！", "提示", MessageBoxButtons.OK, MessageBoxIcon.Stop);

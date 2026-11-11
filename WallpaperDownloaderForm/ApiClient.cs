@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Text;
 
 namespace WallpaperDownloaderForm
@@ -41,7 +42,7 @@ namespace WallpaperDownloaderForm
             }
         }
 
-        internal static async Task<bool> DownloadFileAsync(string url, string filename)
+        internal static async Task<bool> DownloadFileAsync(string url, string filename,string date="")
         {
             try
             {
@@ -60,11 +61,13 @@ namespace WallpaperDownloaderForm
                 }
 
                 // 统一设置时间（原逻辑是固定为今天的 08:00）
-                DateTime targetTime = DateTime.Today.AddHours(8);
-                File.SetCreationTime(filename, targetTime);
-                File.SetLastWriteTime(filename, targetTime);
-                File.SetLastAccessTime(filename, targetTime);
-
+                if (date!="")
+                {
+                    DateTime targetTime = DateTime.ParseExact(date, "yyyyMMdd", CultureInfo.InvariantCulture).AddHours(8);
+                    File.SetCreationTime(filename, targetTime);
+                    File.SetLastWriteTime(filename, targetTime);
+                    File.SetLastAccessTime(filename, targetTime);
+                }
                 return true;
             }
             catch (Exception e)
